@@ -1,3 +1,3 @@
 project(SiCPL)
 
-add_executable( main.cpp )
+add_executable( SiCP main.cpp )

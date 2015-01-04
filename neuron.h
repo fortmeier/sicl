@@ -104,12 +104,5 @@ a[i]*gamma*(sum1)*DiracDelta(sum1)
 	}
 };
 
-void learnAndClassify(int m, Neuron& n)
-{
-	for(int i = 0; i < m; m++)
-	{
-		n.setInput( rand() % 2 );
-		n.update();
-	}
-}
+
 
