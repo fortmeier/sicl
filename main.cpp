@@ -45,10 +45,13 @@ int main()
 
 	int cGlider = 0;
 	int cCross = 0;
+	int cCastle = 0;
+	int cSnake = 0;
 	int cRandom = 0;
 	for(int i = 0; i < 200; i++)
 	{
-		int pattern = rand() % 3;
+		int pattern = rand() % 7;
+		if( pattern == 6 || pattern == 5 ) pattern = 1;
 		int r =	learnAndClassifyRandomNumber( n, pattern );
 		switch( pattern )
 		{
@@ -61,11 +64,19 @@ int main()
 			case 2:
 				cCross += r;
 				break;
+			case 3:
+				cCastle += r;
+				break;
+			case 4:
+				cSnake += r;
+				break;
 		}
 	}
 
 	cout << "total glider: " << cGlider << endl;
 	cout << "total cross: " << cCross << endl;
+	cout << "total castle: " << cCastle << endl;
+	cout << "total snake: " << cSnake << endl;
 	cout << "total random: " << cRandom << endl;
 
 	return 0;
