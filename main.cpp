@@ -14,14 +14,14 @@ void learnAndClassify(int m, Neuron& n)
 	}
 }
 
-int learnAndClassifyRandomNumber(Neuron& n, bool glider)
+int learnAndClassifyRandomNumber(Neuron& n, int pattern)
 {
 	int countFired = 0;
 	int m = rand() % 100;
-	cout << "Classifing m = " << m << " with glider = " << glider << endl;
+	cout << "Classifing m = " << m << " with pattern = " << pattern << endl;
 	for(int i = 0; i < m; i++)
 	{
-		n.setInput( glider );
+		n.setInput( pattern );
 		if( n.update() ) 
 		{
 			cout << "!";
@@ -44,18 +44,28 @@ int main()
 	//learnAndClassify(1000, n);
 
 	int cGlider = 0;
+	int cCross = 0;
 	int cRandom = 0;
 	for(int i = 0; i < 200; i++)
 	{
-		bool glider = rand() % 2;
-		int r =	learnAndClassifyRandomNumber( n, glider );
-		if( glider )
-			cGlider += r;
-		else
-			cRandom += r;
+		int pattern = rand() % 3;
+		int r =	learnAndClassifyRandomNumber( n, pattern );
+		switch( pattern )
+		{
+			case 0:
+				cRandom += r;
+				break;
+			case 1:
+				cGlider += r;
+				break;
+			case 2:
+				cCross += r;
+				break;
+		}
 	}
 
 	cout << "total glider: " << cGlider << endl;
+	cout << "total cross: " << cCross << endl;
 	cout << "total random: " << cRandom << endl;
 
 	return 0;

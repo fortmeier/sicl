@@ -61,20 +61,27 @@ a[i]*gamma*(sum1)*DiracDelta(sum1)
 		return rand() % 2;
 	}
 
-	void setInput( bool isGlider )
+	void setInput( int pattern )
 	{
-		if( isGlider ) 
+		switch( pattern )
 		{
-			a[0] = 0; a[1] = 1; a[2] = 0;
-			a[3] = 0; a[4] = 0; a[5] = 1;
-			a[3] = 1; a[4] = 1; a[5] = 1;
-		}
-		else
-		{
+			case 0: // random
 			a[0] = rnd(); a[1] = rnd(); a[2] = rnd();
 			a[3] = rnd(); a[4] = rnd(); a[5] = rnd();
 			a[6] = rnd(); a[7] = rnd(); a[8] = rnd();
+			break;
+			case 1: // glider
+			a[0] = 0; a[1] = 1; a[2] = 0;
+			a[3] = 0; a[4] = 0; a[5] = 1;
+			a[3] = 1; a[4] = 1; a[5] = 1;
+			break;
+			case 2: // cross
+			a[0] = 0; a[1] = 1; a[2] = 0;
+			a[3] = 1; a[4] = 1; a[5] = 1;
+			a[3] = 0; a[4] = 1; a[5] = 0;
+			break;
 		}
+		
 	}
 
 	bool update( bool doWeightUpdate = true)
