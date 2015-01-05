@@ -11,12 +11,31 @@ class Neuron
 {
 public:
 	#define numInputs 9
-	#define gamma 1.0
 	double w[numInputs];
 	double a[numInputs];
+
 	double V0;
-	double tD;
-	double tP;
+	struct Parameters {
+
+		double tD;
+		double tP;
+		double activation;
+		double drop;
+		double decay;
+		double fitness;
+		double gamma;
+		double jota;
+		Parameters() :
+		  tD(1.0),
+		  tP(-1.0),
+		  activation(1.5),
+		  drop(3.0),
+	          decay(0.99),
+		  gamma(0.015),
+		  jota(0.1)
+		{ }
+	} p;
+
 	double Heaviside( double x )
 	{
 		return 1.0 - 1.0 / (1.0+exp(x*100.0));
@@ -39,15 +58,15 @@ public:
 
 	double calc_dw_dt( int i )
 	{
-		double sum1 = V0 - tD + sumIncomming();
-		double sum2 = tP - V0 - sumIncomming();
+		double sum1 = V0 - p.tD + sumIncomming();
+		double sum2 = p.tP - V0 - sumIncomming();
 		double dEdw =
-a[i]*gamma*(sum1)*DiracDelta(sum1) 
-+ a[i]*gamma*Heaviside(sum1)
+a[i]*p.gamma*(sum1)*DiracDelta(sum1) 
++ a[i]*p.gamma*Heaviside(sum1)
 - a[i]*(sum2)*DiracDelta(sum2)
 - a[i]*Heaviside(sum2)
 		;
-		return -0.1 * dEdw;// * ( a[i] * gamma * dHeaviside_dx( sum1 ) - a[i] * dHeaviside_dx( sum2 );
+		return -p.jota * dEdw;// * ( a[i] * gamma * dHeaviside_dx( sum1 ) - a[i] * dHeaviside_dx( sum2 );
 	}
 
 	void updateWeights()
@@ -96,12 +115,12 @@ a[i]*gamma*(sum1)*DiracDelta(sum1)
 
 	bool update( bool doWeightUpdate = true)
 	{
-		double V = V0 * 0.99 + sumIncomming() * 1.0;
+		double V = V0 * p.decay + sumIncomming() * 1.0;
 		bool hasFired = false;
 		if( doWeightUpdate ) updateWeights();
-		if( V > 1.5)
+		if( V > p.activation)
 		{
-			V -= 3.0;
+			V -= p.drop;
 			hasFired = true;
 		} 
 		V0 = V;
@@ -109,9 +128,7 @@ a[i]*gamma*(sum1)*DiracDelta(sum1)
 	}
 
 	Neuron() :
-	  V0(0),
-	  tD(1.0),
-	  tP(-1.0)
+	  V0(0)
 	{
 		for(int i = 0; i < numInputs; i++)
 		{
