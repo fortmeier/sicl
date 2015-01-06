@@ -41,13 +41,13 @@ double randSigned()
 
 void mutate(Neuron::Parameters& p)
 {
-	//p.tD += randSigned() * 0.1;
-	//p.tP += randSigned() * 0.1;
-	//p.activation += randSigned() * 0.1;
-	//p.drop += randSigned() * 0.1;
-	//p.decay += randSigned() * 0.01;
+	p.tD += randSigned() * 0.1;
+	p.tP += randSigned() * 0.1;
+	p.activation += randSigned() * 0.1;
+	p.drop += randSigned() * 0.1;
+	p.decay += randSigned() * 0.01;
 	p.gamma += randSigned() * 0.05;
-	//p.jota += randSigned() * 0.05;
+	p.jota += randSigned() * 0.05;
 }
 
 double mutateGenepool( vector<Neuron::Parameters>& genepool )

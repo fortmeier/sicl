@@ -31,7 +31,7 @@ public:
 		  activation(1.5),
 		  drop(3.0),
 	          decay(0.99),
-		  gamma(0.015),
+		  gamma(0.05),
 		  jota(0.1)
 		{ }
 	} p;
@@ -71,8 +71,16 @@ a[i]*p.gamma*(sum1)*DiracDelta(sum1)
 
 	void updateWeights()
 	{
+		double dw_dt[numInputs];
 		for(int i = 0; i < numInputs; i++)
-			w[i] += calc_dw_dt(i);
+			dw_dt[i] = calc_dw_dt(i);
+		for(int i = 0; i < numInputs; i++)
+		{
+			w[i] += dw_dt[i];
+			if( w[i] < 0.5 ) w[i] += 0.0013;
+
+		}
+
 	}
 
 	double rnd()
