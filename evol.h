@@ -14,7 +14,7 @@ std::default_random_engine generator;
 int learnAndClassifyRandomNumber(Neuron& n, int pattern)
 {
 	int countFired = 0;
-	int m = rand() % 20;
+	int m = 20;
 	//cout << "Classifing m = " << m << " with pattern = " << pattern << endl;
 	for(int i = 0; i < m; i++)
 	{
@@ -41,8 +41,8 @@ double randSigned()
 
 void mutate(Neuron::Parameters& p)
 {
-	p.tD += randSigned() * 0.1;
-	p.tP += randSigned() * 0.1;
+	//p.tD += randSigned() * 0.1;
+	//p.tP += randSigned() * 0.1;
 	p.activation += randSigned() * 0.1;
 	p.drop += randSigned() * 0.1;
 	p.decay += randSigned() * 0.01;
@@ -79,23 +79,21 @@ void printGenepool( vector<Neuron::Parameters>& genepool )
 	}
 }
 
-double evaluateFitness( Neuron::Parameters& p )
+double evaluateFitness( Neuron& n )
 {
-	Neuron n;
-	n.p = p;
 
 	int noise = 0;
 	int object = rand() % 4 + 1;
 	int cObject = 0;
 	int cNoise = 0;
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 20; i++)
 	{
 		int pattern = rand() % 2;
 		int r =	0;
 		switch( pattern )
 		{
 			case 0:
-				noise = rand()%4+1;
+				//noise = rand()%4+1;
 				r = learnAndClassifyRandomNumber( n, noise );
 				cNoise += r;
 				break;
@@ -117,7 +115,13 @@ double evaluateGenepool( vector<Neuron::Parameters>& genepool )
 {
 	for( auto& p : genepool )
 	{
-		p.fitness = evaluateFitness( p );
+		p.fitness = 0;
+
+		Neuron n;
+		n.p = p;
+
+		for( int i = 0; i < 3; i++ )
+			p.fitness += evaluateFitness( n );
 	}
 }
 
@@ -140,13 +144,14 @@ Neuron::Parameters trainEvol()
 	int indivduals = 100;
 	vector<Neuron::Parameters> genepool( indivduals );
 
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 1000; i++)
 	{
 		copyGoodOnes( genepool );
 		mutateGenepool( genepool );
 		evaluateGenepool( genepool );
 		sort( genepool.begin(), genepool.end(), compareParams );
-		cout << i << ": " << genepool[0].fitness << endl;
+		cout << i << ": " << genepool[0].fitness << " >> ";
+		printParams( genepool[0] );
 	}
 	printGenepool( genepool );
 
